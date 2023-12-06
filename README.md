@@ -5,6 +5,13 @@ Domoticz's plug-in to allow users sending SMS containing commands to be executed
 
 This python code reads all SMS received by a (FF) SMS server. If first command's word is equal to a given prefix, rest of command is analyzed as a valid command. Errors during analysis are returned as SMS to command's sender. If no errors, command is sent to Domoticz and result sent back to sender, still by SMS.
 
+## Note
+There are 2 versions of this code:
+- https://github.com/FlyingDomotic/domoticz-ff_smsserver-plugin.git (this code), which runs as Domoticz's plug-in
+- https://github.com/FlyingDomotic/FF_SmsServerDomoticz.git, which is a Linux service implementation
+
+You may chosse version best suited for you.
+
 ## Prerequisites
 
 You must have a (FF) SMS server (https://github.com/FlyingDomotic/FF_SmsServer.git) properly configured and running somewhere on your network.
