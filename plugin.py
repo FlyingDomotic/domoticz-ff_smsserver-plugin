@@ -19,9 +19,9 @@
 #
 #   More details on README.md
 #
-#   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plug-in.git
+#   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="1.0.0" externallink="https://github.com/FlyingDomoticz/domotic-ff_smsserver-plug-in/">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="1.0.0" externallink="https://github.com/FlyingDomoticz/domotic-ff_smsserver-plugin/">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -344,7 +344,7 @@ class BasePlugin:
     # Called on plug-in statup
     def onStart(self):
         # Parse options
-        self.debugging = Parameters["Mode6"]        # Debug mode fromplug-in parameters
+        self.debugging = Parameters["Mode6"]        # Debug mode from plug-in parameters
         DumpConfigToLog()
         if self.debugging == "Verbose+":
             Domoticz.Debugging(1+2+4+8+16+64)
