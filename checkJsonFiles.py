@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-fileVersion = "1.0.0"                                       # File versionetat maison vide
+fileVersion = "1.1.0"                                       # File version
 
 import pathlib
 import os
