@@ -100,17 +100,32 @@ Par exemple : `domotique allume la lampe de la cuisine`, `domotique ouvre le vol
 Le code utilise du texte codé en UTF-8. Vous pouvez restreindre la comparaison et/ou l'affichage en mode 7 bits ASCII, ce qui éliminera les caractères accentués.
 
 ## Files/Fichiers
+
+The following files should be present into plugin folder:
 - smsTables.json: configuration file describing devices, classes and commands.
 - FF_analyzeCommand.py: contains common code used to parse smsTables.json, and parse SMS commands against them.
 - checkJsonFiles.py: check syntax and relationships of smsTables.json and allows you to test legality of commands (without executing them).
 - makeDoc.py: generate a list of commands supported by your configuration.
 - plugin.py: reads SMS message, check for prefix, parse command and execute it if legal.
 
+Les fichiers suivants doivent être présents dans le répertoire du plugin :
 - smsTables.json: fichier de configuration décrivant les dispositifs, classes et commandes.
 - FF_analyzeCommand.py: contient le code utilisé pour lire smsTables.json, et vérifier/décoder les commandes SMS.
 - checkJsonFiles.py: vérifie la syntaxe et les relations du fichier smsTables.json. Permet aussi de vérifier le format des commandes (sans les exécuter).
 - makeDoc.py: génére une liste des commandes supportées par votre configuration.
 - plugin.py: lit les SMS, vérifie le préfixe, analyse la commande et l'exécute si elle est correcte.
+
+## Examples/Exemples
+
+Examples folder contains the following files:
+- smsTablesEN.json: example of English JSON configuration file
+- smsTablesFR.json: example of French JSON configuration file
+- smsCommand.lua: example of LUA script activated when set command contains "setBy":"user" keyword
+
+Le répertoire Examples contient les fichiers suivants :
+- smsTablesEN.json: exemple de fichier de configuration JSON en anglais
+- smsTablesFR.json: exemple de fichier de configuration JSON en franççais
+- smsCommand.lua: exemple de script LUA activé lorsqu'une commande set contient le mot clef "setBy":"user"
 
 ## smsTables.json content/Contenu du fichier smsTables.json
 

@@ -425,7 +425,7 @@ class BasePlugin:
         # Create devices if not existing
         self.createDevice("SMS request","request")                      # This will contain SMS message received as command/request
         self.createDevice("SMS response","response")                    # This will contain SMS message sent as answer to command/request
-        self.createDevice("SMS user request", "userRequest")            # This will contain decode dSMS command in case of "setBy":"user". User should scan it and send response
+        self.createDevice("SMS user request", "userRequest")            # This will contain decoded SMS command in case of "setBy":"user". User should scan it and send response
 
         # Set MQTT last will
         if self.smsServerLwtTopic:
