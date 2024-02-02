@@ -549,7 +549,7 @@ class BasePlugin:
                     if messages:
                         Domoticz.Log(F"Info: {replaceCrLf(messages)}")
                     # Rebuild non abbreviated command
-                    understoodMessage = self.analyzer.command+" "+self.analyzer.deviceClass+" "+self.analyzer.deviceName+(" "+self.analyzer.valueToSet if self.analyzer.valueToSet != None else "")
+                    understoodMessage = self.analyzer.command+"  "+self.analyzer.deviceName+(" "+self.analyzer.valueToSet if self.analyzer.valueToSet != None else "")
                     Domoticz.Log(F"Understood command is >{understoodMessage}<")
                     # Set Domoticz last request with non abbreviated command
                     lastRequestDevice = self.getDevice('request')
