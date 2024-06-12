@@ -1,4 +1,4 @@
-# FF_SmsServer Domoticz plug-in/Plugin Domotiez pour FF_SmsServer
+# FF_SmsServer Domoticz plug-in/Plugin Domoticz pour FF_SmsServer
 Domoticz's plug-in to allow users sending SMS containing commands to be executed by Domoticz.
 
 Ce plugin Domoticz execute des commandes envoyées par SMS.
