@@ -7,7 +7,7 @@
 		"smsServerPrefix": "test",
 		"domoticzInTopic": "domoticz/in",
 		"domoticzOutTopic": "domoticz/out",
-		"domoticzUrl": "http://FouFou:Dvqvlnd0McAbZ@noailles.foufou:8080/",
+		"domoticzUrl": "http://127.0.0.1:8080/",
 		"language": "FR",
 		"automaticUpdate": true,
 		"keepDomoticzDeviceList": false,

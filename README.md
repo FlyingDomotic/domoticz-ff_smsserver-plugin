@@ -379,10 +379,20 @@ Thermostat clim séjour	[état/affiche/règle/définis] thermostat clim séjour 
 Even if the simplest way is to use default configuration and settings, there are cases where you want to customize a bit auto-generated file.
 
 First of all, you may change default settings in FF_SmsServerConfig.json file and run FF_SmsServerConfig.py again. Here are the different parts and their meaning:
-[To Do]
+	- "settings": this part is identical to description of auto-generated file (except that "templateVersion" is not present)
+	- "onCategories": list device categories that can receive "on" command
+	- "offCategories": list device categories that can receive "off" command
+	- "defineCategories": describes data that should be added for categories supporting "set" command
+	- "hiddenCategories": list devices categories that should be hidden (not included in auto-generated file). Specification is Unix regular expression (in short, "Test" means hide "Test" category only, ".Test" means everything ending by "Test", "Test.*" everything starting by "Test" and ".*Test.*" everything containing "Test"). More complex specification can be found in Unix documentation under "Regular Expression"
+	- "hiddenDevices": list devices names that should be hidden (not included in auto-generated file). Specification is Unix regular expression (same as above)
 
-Then, you may change either smsTablesEN.template or smsTablesFR.template (depending on you language settings). You have then to run FF_SmsServerConfig.py again. Here are the different parts and their meaning:
-[To Do]
+Script supports the following categories: Air Quality, Alert, Barometer, Blinds, Blinds Percentage, Color Dimmer, Contact, Counter, Current, Custom Sensor, Dimmer, Distance, Door Contact, Door Lock, Doorbell, Dusk Sensor, Energy, Energy Generated, Fan, Gas, Humidity, kWh, Leaf Wetness, Lux, Media Player, Motion Sensor, On/Off, Percentage, Pressure, Push Off Button, Push On Button, Rain, Scale, Selector, Smoke Detector, Soil Moisture, Solar Radiation, Sound Level, Temp, Text, Thermostat, Time, Usage, UV, Visibility, Voltage, Water, Waterflow, Wind, X10 Siren.
+
+Only those in "onCategories", "offCategories", "defineCategories" are settable, others are only displayable. Put categories you don't want to see in "hiddenCategories" and devices you don't want to see in "hiddenDevices".
+
+Then, you may change either smsTablesEN.template or smsTablesFR.template (depending on you language settings). You have then to run FF_SmsServerConfig.py again. These files are copied into auto-generated file, with some part replaced by FF_SmsServerConfig.py. Here are the different parts and their meaning:
+	- "settings": contains "templateVersion"
+	- "ignores", "commandValues" and "commands": content is identical to description of auto-generated configuration file.
 
 If these two methods don't fit your needs, you may also copy smsTables.json under another name (for example mySmsTables.json), edit it manually and change json file name in plugin settings. You can find description of this file in chapter "Generated smsTables.json content/Contenu du fichier smsTables.json généré"
 
@@ -395,12 +405,22 @@ And if something is missing, don't hesitate to ask me too, still opening an issu
 Même si la façon la plus simple est d'utiliser les configurations et paramètres par défaut, il y a des cas où vous pouvez souhaiter adapter un peu le fichier généré.
 
 Tout d'abord, vous pouvez changer les paramètres par défaut dans le fichier FF_SmsServerConfig.json, puis relancer FF_SmsServerConfig.py. Voici les différents éléments et leur signification :
-[To Do]
+	- "settings": cette partie est identique à la description du fichier auto-généré (sauf que "templateVersion" n'existe pas ici)
+	- "onCategories": liste les catégories de dispositifs qui peuvent recevoir une commande "on"
+	- "offCategories": liste les catégories de dispositifs qui peuvent recevoir une commande "on"
+	- "defineCategories": contient les données qui doivent être ajoutées aux catégories supportant la commande "set"
+	- "hiddenCategories": liste les catégories de dispositifs qui doivent être cachées/ignorées. Le format est celui d'une expression régulière Unix (en gros, "Test" cache la catégorie "Test" seulement, ".Test" signifie tout ce qui se termine par "Test", "Test.*" tou ce qui commence par "Test" et ".*Test.*" tout ce qui contient "Test"). Les spécifications plus complexes sont décrites dans la documentation Unix, chercher "Regular Expression"
+	- "hiddenDevices": liste les noms des ispositifs qui doivent être cachées/ignorées. Le format est celui d'une expression régulière Unix (voir précédement)
+
+Script supports the following categories: Air Quality, Alert, Barometer, Blinds, Blinds Percentage, Color Dimmer, Contact, Counter, Current, Custom Sensor, Dimmer, Distance, Door Contact, Door Lock, Doorbell, Dusk Sensor, Energy, Energy Generated, Fan, Gas, Humidity, kWh, Leaf Wetness, Lux, Media Player, Motion Sensor, On/Off, Percentage, Pressure, Push Off Button, Push On Button, Rain, Scale, Selector, Smoke Detector, Soil Moisture, Solar Radiation, Sound Level, Temp, Text, Thermostat, Time, Usage, UV, Visibility, Voltage, Water, Waterflow, Wind, X10 Siren.
+
+Only those in "onCategories", "offCategories", "defineCategories" are settable, others are only displayable. Put categories you don't want to see in "hiddenCategories" and devices you don't want to see in "hiddenDevices".
 
 Ensuite, vous pouvez changer les fichiers smsTablesEN.template ou smsTablesFR.template (selon votre langue). Là encore, vous aurez à relancer ensuite FF_SmsServerConfig.py. Voici les différents éléments et leur signification :
-[To Do]
+	- "settings": contient "templateVersion"
+	- "ignores", "commandValues" et "commands": leur contenu est identique ) la description du fichier de configuration auto-généré
 
-si ces 2 méthodes ne satisfont pas vos besoins,, vous pouvez également copier le fichier smsTables.json sous un autre nom (par exemple mySmsTables.json), editez le manuellement et modifiez le nom du fichier json à utiliser dans les paramètres du plugin. Vous trouverez une description de ce fichier au chapitre "Generated smsTables.json content/Contenu du fichier smsTables.json généré".
+Si ces 2 méthodes ne satisfont pas vos besoins,, vous pouvez également copier le fichier smsTables.json sous un autre nom (par exemple mySmsTables.json), editez le manuellement et modifiez le nom du fichier json à utiliser dans les paramètres du plugin. Vous trouverez une description de ce fichier au chapitre "Generated smsTables.json content/Contenu du fichier smsTables.json généré".
 
 En dernier ressort, si ceci ne correspond toujours pas à vos besoin, jetez un oeil à https://github.com/FlyingDomotic/FF_SmsServerDomoticz.git, qui a plus d'options et de fonctions, tourne en tant que service mais a besoin d'une configuration manuelle.
 
