@@ -54,11 +54,11 @@ phoneNumber = ""														-- Will contain phone number to answer to
 smsNumberTag = 1			-- SMS number to answer to. Taken from SMS sender phone number
 commandTag = 2				-- Command. 1 : set On, 2 : set Off, 4 : show, 8 : set Value, 'local' : execute local command. Taken from "mappingValues"/"mappingValue" via "commands"
 domoticzIdxTag = 3			-- Domoticz device index (or local command to execute). Taken from "devices"/"index"
-deviceClassTag = 4			-- Sensor type. Taken from "deviceClasses"
+deviceCategoryTag = 4		-- Sensor type. Taken from "device"/"category"
 	-- Following codes are only used for commandTag = 8 (set Value)
-valueToSetTag = 5			-- Value to set. Taken from received command line or "deviceClasses"/"values" via "devices" when it exists
-originalValueToSetTag = 6	-- Original value to set from received command line. Loaded when "deviceClasses"/"values" via "devices" was found
-setTypeTag = 7				-- Type of value to set. Taken from "deviceClasses"/"setType" via "devices".
+valueToSetTag = 5			-- Value to set. Taken from received command line
+originalValueToSetTag = 6	-- Original value to set from received command line
+setTypeTag = 7				-- Type of value to set. Taken from "device"/"setType" via "devices".
 
 -- Set your local values here
 smsCommandDeviceName = "SMS user request"								-- This is received SMS command Domoticz's device name (default value, change it if needed)
@@ -92,7 +92,7 @@ for deviceName,deviceValue in pairs(devicechanged) do
 				commandArray[sensorName] = 'Off'
 				notify(sensorName..' turned off')
 			elseif (tags[commandTag] == '8') then						-- This is a set command
-				if (tags[deviceClassTag] == 'panel') then				-- Example of non standard sensor type management (here, sensor type "panel")
+				if (tags[deviceCategoryTag] == 'panel') then			-- Example of non standard sensor type management (here, sensor type "panel")
 				-- Specific example of security panel - Delete lines up to next "end" if not needed
 					if (tags[valueToSetTag] == 'disarmed' or tags[valueToSetTag] == 'off') then
 						commandArray['OpenURL'] = domoticzUrl..'/json.htm?type=command&param=setsecstatus&secstatus=0&seccode='..panelSecurityCode

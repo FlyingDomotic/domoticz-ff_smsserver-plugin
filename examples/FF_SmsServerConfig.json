@@ -1,0 +1,47 @@
+{
+	"settings": {
+		"configVersion": "V1.0.0",
+		"smsServerReceiveTopic": "smsServer/received",
+		"smsServerSendTopic": "smsServer/toSend",
+		"smsServerLwtTopic": "smsServer/LWT",
+		"smsServerPrefix": "test",
+		"domoticzInTopic": "domoticz/in",
+		"domoticzOutTopic": "domoticz/out",
+		"domoticzUrl": "http://FouFou:Dvqvlnd0McAbZ@noailles.foufou:8080/",
+		"language": "FR",
+		"automaticUpdate": true,
+		"keepDomoticzDeviceList": false,
+		"showHiddenDevices": false,
+		"showUsedDeviceOnly": true
+	},
+	"onCategories": [
+		"Blinds",
+		"Blinds Percentage",
+		"Color Dimmer",
+		"Dimmer",
+		"Door Lock",
+		"On/Off",
+		"Push On Button"
+	],
+	"offCategories": [
+		"Blinds",
+		"Blinds Percentage",
+		"Color Dimmer",
+		"Dimmer",
+		"Door Lock",
+		"On/Off",
+		"Push Off Button"
+	],
+	"defineCategories": {
+		"Blinds Percentage": {"setType":"level", "minValue":0, "maxValue":100},
+		"Color Dimmer": {"setType":"level", "minValue":0, "maxValue":100, "mapping": {"on":100, "off": 0}},
+		"Dimmer":  {"setType":"level", "minValue":0, "maxValue":100, "mapping": {"on":100, "off": 0}},
+		"Selector": {"setType":"level", "mapping": "[[selectorValues]]"},
+		"Thermostat":  {"setType": "setPoint", "minValue":-40, "maxValue":100},
+		"Setpoint":  {"setType":"setPoint", "minValue":-40, "maxValue":100}
+	},
+	"hiddenCategories": [
+	],
+	"hiddenDevices": [
+	]
+}

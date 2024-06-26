@@ -21,27 +21,44 @@ analyzer = FF_analyzeCommand()
 
 errorText, messages = analyzer.loadData(decodeFile)
 print("LoadData status: "+(errorText if errorText != "" else "Ok"))
-print(messages)
+if messages:
+    print(messages)
 if errorText:
     exit()
 
-with open('config.txt', 'wt') as outFile:
-    for device in analyzer.devicesDict.keys():
-        if analyzer.classAfterDevice:
-            deviceClass = device.split(' ')[len(device.split(" "))-1]
-        else:
-            deviceClass = device.split(' ')[0]
-        deviceName = analyzer.getValue2(analyzer.devicesDict, device, 'name')
-        deviceCommandClass = analyzer.getValue2(analyzer.deviceClassesDict, deviceClass, 'commandClass')
-        deviceCommandClasses = analyzer.getValue2(analyzer.commandClassesDict, deviceCommandClass, 'commandValue')
-        deviceClassMappings = analyzer.getValue2(analyzer.deviceClassesDict, deviceClass, "mapping")
+content = []
+for device in analyzer.devicesDict.keys():
+    deviceName = analyzer.getValue2(analyzer.devicesDict, device, 'name', device)
+    deviceCommandValues = analyzer.getValue2(analyzer.devicesDict, device, 'allow')
+    deviceClassMappings = analyzer.getValue2(analyzer.devicesDict, device, "mapping")
         deviceCommands = ""
         for command in analyzer.commandsDict:
-            if analyzer.getValue2(analyzer.commandsDict, command, 'commandValue') in deviceCommandClasses:
+        commandValue = analyzer.getValue2(analyzer.commandsDict, command, 'commandValue')
+        if commandValue in deviceCommandValues:
                 deviceCommands += "/" + command
         setValues = ""
         if deviceClassMappings:
             for value in deviceClassMappings.keys():
                 setValues += "/" + value
-            setValues = " [" + setValues[1:] + "]"
-        outFile.write(deviceName+"\t"+deviceCommands[1:]+" "+device+setValues+"\n")
+
+    minValue = analyzer.getValue2(analyzer.devicesDict, device, "minValue")
+    maxValue = analyzer.getValue2(analyzer.devicesDict, device, "maxValue")
+    setValueMinMax = ""
+    if minValue != None:
+        if maxValue != None:
+            setValues += F"/{minValue}:{maxValue}"
+        else:
+            setValues += F"/>={minValue}"
+    else:
+        if maxValue != None:
+            setValues = F"/<={maxValue}"
+    
+    if setValues:
+        setValues = F" [{setValues[1:]}]"
+
+    content.append(deviceName+"\t["+deviceCommands[1:]+"] "+device.lower()+setValues)
+
+content.sort()
+with open('config.txt', 'wt') as outFile:
+    for line in content:
+        outFile.write(line+"\n")

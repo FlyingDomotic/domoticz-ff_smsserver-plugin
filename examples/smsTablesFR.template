@@ -1,0 +1,41 @@
+{
+	"settings": {
+		"templateVersion": "V1.0.0",
+"replaceMeBy": "settings"
+	},
+	"ignores": [
+		"de",
+		"du",
+		"des",
+		"d'",
+		"le",
+		"la",
+		"les",
+		"l'",
+		"à",
+		"a",
+		"=",
+		"sur"
+	],
+	"commandValues": {
+		"cdeOn": {"codeValue": 1},
+		"cdeOff": {"codeValue": 2},
+		"cdeShow": {"codeValue": 4},
+		"cdeSet": {"codeValue": 8, "set": true}
+	},
+	"commands": {
+		"allume": {"commandValue": "cdeOn"},
+		"arme": {"commandValue": "cdeOn"},
+		"ouvre": {"commandValue": "cdeOn"},
+		"éteins": {"commandValue": "cdeOff"},
+		"désarme": {"commandValue": "cdeOff"},
+		"ferme": {"commandValue": "cdeOff"},
+		"état": {"commandValue": "cdeShow"},
+		"affiche": {"commandValue": "cdeShow"},
+		"règle": {"commandValue": "cdeSet"},
+		"définis": {"commandValue": "cdeSet"}
+	},
+	"devices": {
+"replaceMeBy": "devices"
+	}
+}

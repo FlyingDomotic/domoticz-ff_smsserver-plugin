@@ -1,0 +1,32 @@
+{
+	"settings": {
+		"templateVersion": "V1.0.0",
+"replaceMeBy": "settings"
+	},
+	"ignores": [
+		"of",
+		"the",
+		"=",
+		"to"
+	],
+	"commandValues": {
+		"cdeOn": {"codeValue": 1},
+		"cdeOff": {"codeValue": 2},
+		"cdeShow": {"codeValue": 4},
+		"cdeSet": {"codeValue": 8, "set": true}
+	},
+	"commands": {
+		"turn": {"commandValue": "cdeSet"},
+		"arm": {"commandValue": "cdeOn"},
+		"open": {"commandValue": "cdeOn"},
+		"disarm": {"commandValue": "cdeOff"},
+		"close": {"commandValue": "cdeOff"},
+		"state": {"commandValue": "cdeShow"},
+		"display": {"commandValue": "cdeShow"},
+		"set": {"commandValue": "cdeSet"},
+		"define": {"commandValue": "cdeSet"}
+	},
+	"devices": {
+"replaceMeBy": "devices"
+	}
+}
