@@ -4,7 +4,7 @@
 		"smsServerReceiveTopic": "smsServer/received",
 		"smsServerSendTopic": "smsServer/toSend",
 		"smsServerLwtTopic": "smsServer/LWT",
-		"smsServerPrefix": "test",
+		"smsServerPrefix": "domoticz",
 		"domoticzInTopic": "domoticz/in",
 		"domoticzOutTopic": "domoticz/out",
 		"domoticzUrl": "http://127.0.0.1:8080/",

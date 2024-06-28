@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.1" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.2" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -45,6 +45,7 @@
 """
 from sys import settrace
 import Domoticz
+from urllib.parse import urlparse
 from datetime import datetime
 from itertools import count, filterfalse
 import typing_extensions
@@ -187,6 +188,7 @@ class MqttClient:
 class HttpClient:
     Address = ""                    # IP address of HTTP server
     Port = ""                       # Port of HTTP server
+    isHttps = False                 # Is connection using https?
     httpConn = None                 # HTTP connection object
     httpConnectedCb = None          # HTTP connection callback
     httpDisconnectedCb = None       # HTTP disconnection callback
@@ -198,10 +200,11 @@ class HttpClient:
     sendDelay = 0                   # Delay bofore sending device status request (seconds)
 
     # Class initialization: save parameters and open connection
-    def __init__(self, destination, port, httpConnectedCb, httpDisconnectedCb, httpMessageCb):
+    def __init__(self, destination, port, isHttps, httpConnectedCb, httpDisconnectedCb, httpMessageCb):
         Domoticz.Debug("HttpClient::__init__")
         self.Address = destination
         self.Port = port
+        self.isHttps = isHttps
         self.httpConnectedCb = httpConnectedCb
         self.httpDisconnectedCb = httpDisconnectedCb
         self.httpMessageCb = httpMessageCb
@@ -221,7 +224,10 @@ class HttpClient:
         if (self.httpConn != None):
             self.Close()
         self.isConnected = False
-        self.httpConn = Domoticz.Connection(Name="HTTP", Transport="TCP/IP", Protocol="HTTP", Address=self.Address, Port=self.Port)
+        if self.isHttps:
+            self.httpConn = Domoticz.Connection(Name="HTTP", Transport="TCP/IP", Protocol="HTTPS", Address=self.Address, Port=self.Port)
+        else:
+            self.httpConn = Domoticz.Connection(Name="HTTP", Transport="TCP/IP", Protocol="HTTP", Address=self.Address, Port=self.Port)
         self.httpConn.Connect()
 
     # Close HTTP connection
@@ -297,9 +303,10 @@ class BasePlugin:
     smsServerPrefix = ""            # Command prefix (we'll treat messages only if starting by this prefix)
     domoticzInTopic = ""            # Domoticz In topic
     domoticzOutTopic = ""           # Domoticz Out topic
+    domoticzAddress = ""            # Domoticz IP address
+    domoticzPort = ""               # Domoticz port
+    domoticzHttps = False           # Is Domoticz using https scheme?
     httpClient = None               # HTTP client object
-    httpServerAddress = ""          # HTTP server address
-    httpServerPort = ""             # HTTP server port
 
     debugging = "Normal"            # Set Debug level
     initDone = False                # Clear init flag
@@ -395,8 +402,7 @@ class BasePlugin:
             self.smsServerPrefix = getValue(settings, 'smsServerPrefix')
             self.domoticzInTopic = getValue(settings, 'domoticzInTopic')
             self.domoticzOutTopic = getValue(settings, 'domoticzOutTopic')
-            self.domoticzAddress = getValue(settings, 'domoticzAddress')
-            self.domoticzPort = getValue(settings, 'domoticzPort')
+            self.domoticzUrl = getValue(settings, 'domoticzUrl')
             if self.smsServerLwtTopic:
                 self.smsServerLwtTopic +=  "/" + self.smsServerPrefix
             inError = False
@@ -412,12 +418,14 @@ class BasePlugin:
             if not self.domoticzOutTopic:
                 Domoticz.Error(F"Can't find 'settings/domoticzOutTopic' in {jsonFile}")
                 inError = True
-            if not self.domoticzAddress:
-                Domoticz.Error(F"Can't find 'settings/domoticzAddress' in {jsonFile}")
+            if not self.domoticzUrl:
+                Domoticz.Error(F"Can't find 'settings/domoticzUrl' in {jsonFile}")
                 inError = True
-            if not self.domoticzPort:
-                Domoticz.Error(F"Can't find 'settings/domoticzPort' in {jsonFile}")
-                inError = True
+            else:
+                urlParts = urlparse(self.domoticzUrl)
+                self.domoticzAddress = urlParts.hostname
+                self.domoticzPort = str(urlParts.port)
+                self.domoticzHttps = urlParts.scheme.lower() == "https"
             # Exit if something not found
             if inError :
                 return
@@ -442,7 +450,7 @@ class BasePlugin:
             lwtTopic, lwtData)
 
         # Connect to HTTP server
-        self.httpClient = HttpClient(self.domoticzAddress, self.domoticzPort, \
+        self.httpClient = HttpClient(self.domoticzAddress, self.domoticzPort, self.domoticzHttps, \
             self.onConnect, self.onDisconnect, self.onMessage)
 
         # Enable heartbeat
