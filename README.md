@@ -40,23 +40,19 @@ cd FF_SmsServer
 ```
 cp examples/* ./
 ```
-3. Make .py files executables
-```
-chmod +x *.py
-```
-4. If defaults settings don't fit you needs, edit FF_SmsServerConfig.json to match your requirements.
-5. Run FF_SmsServerConfig.py script, which will create smsTables.json file.
+3. If defaults settings don't fit you needs, edit FF_SmsServerConfig.json to match your requirements.
+4. Run FF_SmsServerConfig.py script, which will create smsTables.json file.
 ```
 ./FF_SmsServerConfig.py
 ```
-6. Run makeDoc.py script, which will create config.txt file, sorted by Domoticz device name, containing available commands on your installation. Don't forget to add chosen prefix (by default domoticz) in front of each command.
+5. Run makeDoc.py script, which will create config.txt file, sorted by Domoticz device name, containing available commands on your installation. Don't forget to add chosen prefix (by default domoticz) in front of each command.
 ```
 ./makeDoc.py
 ```
-7. Restart Domoticz.
-8. Make sure that "Accept new Hardware Devices" is enabled in Domoticz settings.
-9. Go to "Hardware" page and add new item with type "FF_SmsServer with LAN interface".
-10. Give "smsTables.json" as configuration file name to be used (located in FF_SmsServer plugin folder).
+6. Restart Domoticz.
+7. Make sure that "Accept new Hardware Devices" is enabled in Domoticz settings.
+8. Go to "Hardware" page and add new item with type "FF_SmsServer with LAN interface".
+9. Give "smsTables.json" as configuration file name to be used (located in FF_SmsServer plugin folder).
 
 1. Clonez le code dans le répertoire plugins de Domoticz.
 ```
@@ -68,23 +64,19 @@ cd FF_SmsServer
 ```
 cp examples/* ./
 ```
-3. Autoriser l'exécution des fichiers .py
-```
-chmod +x *.py
-```
-4. Si les valeurs par défaut ne vous conviennent pas, éditer le fichier FF_SmsServerConfig.json pour l'adapter àà vos besoins.
-5. Lancez le script FF_SmsServerConfig.py qui va générer le fichier smsTables.json.
+3. Si les valeurs par défaut ne vous conviennent pas, éditer le fichier FF_SmsServerConfig.json pour l'adapter àà vos besoins.
+4. Lancez le script FF_SmsServerConfig.py qui va générer le fichier smsTables.json.
 ```
 ./FF_SmsServerConfig.py
 ```
-6. Lancez le script makeDoc.py qui va générer le fichier config.txt, qui contient, trié par nom de dispositif Domoticz, les commandes disponibles sur votre installation. Ne pas oublier d'ajouter le préfixe choisi (par défaut domoticz) devant toutes les commandes.
+5. Lancez le script makeDoc.py qui va générer le fichier config.txt, qui contient, trié par nom de dispositif Domoticz, les commandes disponibles sur votre installation. Ne pas oublier d'ajouter le préfixe choisi (par défaut domoticz) devant toutes les commandes.
 ```
 ./makeDoc.py
 ```
-7. Relancez Domoticz.
-8. Assurez vous que "Accepter de nouveaux dispositifs" est coché dans les paramètres de Domoticz.
-9. Allez dans la page "Matériel" et ajouter un matériel "FF_SmsServer with LAN interface".
-10. Donnez le nom "smsTables.json" pour le fichier de configuration JSON (situé dans le répertoire du plugin FF_SmsServer).
+6. Relancez Domoticz.
+7. Assurez vous que "Accepter de nouveaux dispositifs" est coché dans les paramètres de Domoticz.
+8. Allez dans la page "Matériel" et ajouter un matériel "FF_SmsServer with LAN interface".
+9. Donnez le nom "smsTables.json" pour le fichier de configuration JSON (situé dans le répertoire du plugin FF_SmsServer).
 
 ## Update/Mise à jour
 
