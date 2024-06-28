@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.2" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.3" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -168,8 +168,8 @@ class MqttClient:
             topic = Data['Topic']
         payloadStr = ''
         if 'Payload' in Data:
-            payloadStr = Data['Payload'].decode('utf8','replace')
-            payloadStr = str(payloadStr.encode('unicode_escape'))
+            payloadStr = Data['Payload']####.decode('utf8','replace')
+            ####payloadStr = str(payloadStr.encode('unicode_escape'))
 
         if Data['Verb'] == "CONNACK":
             self.isConnected = True
@@ -277,11 +277,11 @@ class HttpClient:
             dataValue = getValue(result[0], "Data", "not known")
             lastUpdate = getValue(result[0], "LastUpdate", "????-??-?? ??:??:??")
             # Compose SMS answer message (device name/value @dd/mm hh:mm)
-            message = F"{self.deviceName} is {dataValue} @{lastUpdate[8:10]}/{lastUpdate[5:7]} {lastUpdate[11:16]}"
+            message = self.deviceName + F" is {dataValue} @{lastUpdate[8:10]}/{lastUpdate[5:7]} {lastUpdate[11:16]}"
             jsonAnswer = {}
             jsonAnswer['number'] = str(self.smsPhoneNumber)
             jsonAnswer['message'] = message
-            answerMessage = json.dumps(jsonAnswer)
+            answerMessage = json.dumps(jsonAnswer, ensure_ascii=False)
             Domoticz.Log(F"Show result: >{replaceCrLf(answerMessage)}<")
             _plugin.mqttClient.Publish(_plugin.smsServerSendTopic, answerMessage)
             self.Close()
@@ -548,7 +548,7 @@ class BasePlugin:
                     jsonAnswer = {}
                     jsonAnswer['number'] = str(number)
                     jsonAnswer['message'] = message
-                    answerMessage = json.dumps(jsonAnswer)
+                    answerMessage = json.dumps(jsonAnswer, ensure_ascii=False)
                     Domoticz.Log(F"Answer: >{replaceCrLf(answerMessage)}<")
                     self.mqttClient.Publish(self.smsServerSendTopic, answerMessage)
                     return
@@ -730,8 +730,8 @@ def DumpConfigToLog():
         Domoticz.Log("Device: " + str(x) + " - " + str(Devices[x]))
 
 def DumpMQTTMessageToLog(topic, rawmessage, prefix=''):
-    message = rawmessage.decode('utf8','replace')
-    message = str(message.encode('unicode_escape'))
+    message = rawmessage####.decode('utf8','replace')
+    ####message = str(message.encode('unicode_escape'))
     Domoticz.Log(prefix+topic+":"+message)
 
 # Returns a dictionary value giving a key or default value if not existing
