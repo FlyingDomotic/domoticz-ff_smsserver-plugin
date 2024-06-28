@@ -16,7 +16,7 @@ os.chdir(currentPath)
 # Get this file name (w/o path & extension)
 cdeFile = pathlib.Path(__file__).stem
 
-decodeFile = os.path.join(currentPath, 'smsTables.json')
+decodeFile = os.path.join(currentPath, "smsTables.json")
 analyzer = FF_analyzeCommand()
 
 errorText, messages = analyzer.loadData(decodeFile)
@@ -28,18 +28,18 @@ if errorText:
 
 content = []
 for device in analyzer.devicesDict.keys():
-    deviceName = analyzer.getValue2(analyzer.devicesDict, device, 'name', device)
-    deviceCommandValues = analyzer.getValue2(analyzer.devicesDict, device, 'allow')
+    deviceName = analyzer.getValue2(analyzer.devicesDict, device, "name", device)
+    deviceCommandValues = analyzer.getValue2(analyzer.devicesDict, device, "allow")
     deviceClassMappings = analyzer.getValue2(analyzer.devicesDict, device, "mapping")
-        deviceCommands = ""
-        for command in analyzer.commandsDict:
-        commandValue = analyzer.getValue2(analyzer.commandsDict, command, 'commandValue')
-        if commandValue in deviceCommandValues:
-                deviceCommands += "/" + command
-        setValues = ""
-        if deviceClassMappings:
-            for value in deviceClassMappings.keys():
-                setValues += "/" + value
+    deviceCommands = ""
+    for command in analyzer.commandsDict:
+    commandValue = analyzer.getValue2(analyzer.commandsDict, command, "commandValue")
+    if commandValue in deviceCommandValues:
+            deviceCommands += "/" + command
+    setValues = ""
+    if deviceClassMappings:
+        for value in deviceClassMappings.keys():
+            setValues += "/" + value
 
     minValue = analyzer.getValue2(analyzer.devicesDict, device, "minValue")
     maxValue = analyzer.getValue2(analyzer.devicesDict, device, "maxValue")
@@ -59,6 +59,6 @@ for device in analyzer.devicesDict.keys():
     content.append(deviceName+"\t["+deviceCommands[1:]+"] "+device.lower()+setValues)
 
 content.sort()
-with open('config.txt', 'wt') as outFile:
+with open("config.txt", "wt") as outFile:
     for line in content:
         outFile.write(line+"\n")
