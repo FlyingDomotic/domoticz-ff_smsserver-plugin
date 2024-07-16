@@ -169,7 +169,7 @@ for device in response.json()["result"]:
         elif "Blinds" in deviceCategory:
             deviceCategory = "Blinds"
         # Set category to "SecurityPanel" if subtype is "Security Panel"
-        if deviceSubType == "Security Pannel": category = "SecurityPanel"
+        if deviceSubType == "Security Panel": deviceCategory = "SecurityPanel"
         # Convert level names if existing
         selectorValues = ""
         if deviceLevelNames:
