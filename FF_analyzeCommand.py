@@ -22,7 +22,6 @@ import pathlib
 import os
 import json
 from re import A, match, search
-from typing_extensions import get_overloads
 import unidecode
 
 class FF_analyzeCommand:
