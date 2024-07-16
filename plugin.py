@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.5" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.7" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -189,6 +189,8 @@ class MqttClient:
 class HttpClient:
     Address = ""                    # IP address of HTTP server
     Port = ""                       # Port of HTTP server
+    hostUsername = ""               # Host IP username
+    hostPassword = ""               # Host IP password
     isHttps = False                 # Is connection using https?
     httpConn = None                 # HTTP connection object
     httpConnectedCb = None          # HTTP connection callback
@@ -201,9 +203,11 @@ class HttpClient:
     sendDelay = 0                   # Delay bofore sending device status request (seconds)
 
     # Class initialization: save parameters and open connection
-    def __init__(self, destination, port, isHttps, httpConnectedCb, httpDisconnectedCb, httpMessageCb):
+    def __init__(self, destination, username, password, port, isHttps, httpConnectedCb, httpDisconnectedCb, httpMessageCb):
         Domoticz.Debug("HttpClient::__init__")
         self.Address = destination
+        self.hostUsername = username
+        self.hostPassword = password
         self.Port = port
         self.isHttps = isHttps
         self.httpConnectedCb = httpConnectedCb
@@ -221,7 +225,7 @@ class HttpClient:
 
     # Open HTTP connection at TCP level
     def Open(self):
-        Domoticz.Debug("HttpClient::Open")
+        Domoticz.Debug("HttpClient::Open "+str(self.Address))
         if (self.httpConn != None):
             self.Close()
         self.isConnected = False
@@ -245,14 +249,35 @@ class HttpClient:
         else:
             if (Status == 0):
                 Domoticz.Log(F"Successful connect to {Connection.Address}:{Connection.Port}")
-                sendData = { 'Verb':'GET',
-                             'URL':'/json.htm?type=devices&rid='+str(self.deviceId),
-                             'Headers':{'Content-Type': 'application/json; charset=utf-8', \
-                                        'Connection': 'keep-alive', \
-                                        'Accept': 'Content-Type: text/html; charset=UTF-8', \
-                                        'Host': self.Address+":"+self.Port, \
-                                        'User-Agent':'Domoticz/1.0' }
-                            }
+                # HTTP API changed since 2023.2
+                domVersion = str(Parameters["DomoticzVersion"])
+                if (domVersion[:2] == "20" and domVersion >= "2023.2"):
+                    apiParams = "?type=command&param=getdevices&rid="+str(self.deviceId)
+                else:
+                    apiParams = "?type=devices&rid="+str(self.deviceId)
+                if self.hostUsername:
+                    authorizationText = self.hostUsername
+                    if self.hostPassword:
+                        authorizationText += ":" + self.hostPassword
+                    authorization = base64.b64encode(authorizationText.encode('ascii')).decode("UTF_8")
+                    sendData = { 'Verb':'GET',
+                                 'URL':'/json.htm'+apiParams,
+                                 'Headers':{'Content-Type': 'application/json; charset=utf-8', \
+                                            'Connection': 'keep-alive', \
+                                            'Accept': 'Content-Type: text/html; charset=UTF-8', \
+                                            'Host': self.Address+":"+self.Port, \
+                                            'Authorization': 'Basic '+authorization, \
+                                            'User-Agent':'Domoticz/1.0' }
+                                }
+                else:
+                    sendData = { 'Verb':'GET',
+                                 'URL':'/json.htm'+apiParams,
+                                 'Headers':{'Content-Type': 'application/json; charset=utf-8', \
+                                            'Connection': 'keep-alive', \
+                                            'Accept': 'Content-Type: text/html; charset=UTF-8', \
+                                            'Host': self.Address+":"+self.Port, \
+                                            'User-Agent':'Domoticz/1.0' }
+                                }
                 Connection.Send(sendData, self.sendDelay)
             else:
                 Domoticz.Error(F"Failed to connect to {Connection.Address}:{Connection.Port}, description: {Description}")
@@ -315,11 +340,12 @@ class BasePlugin:
     smsServerPrefix = ""            # Command prefix (we'll treat messages only if starting by this prefix)
     domoticzInTopic = ""            # Domoticz In topic
     domoticzOutTopic = ""           # Domoticz Out topic
+    domoticzUsername = ""           # Domoticz IP username
+    domoticzPassword = ""           # Domoticz IP password
     domoticzAddress = ""            # Domoticz IP address
     domoticzPort = ""               # Domoticz port
     domoticzHttps = False           # Is Domoticz using https scheme?
     httpClient = None               # HTTP client object
-
     debugging = "Normal"            # Set Debug level
     initDone = False                # Clear init flag
     analyzer = FF_analyzeCommand()  # Load analyzer object
@@ -435,6 +461,8 @@ class BasePlugin:
                 inError = True
             else:
                 urlParts = urlparse(self.domoticzUrl)
+                self.domoticzUsername = urlParts.username
+                self.domoticzPassword = urlParts.password
                 self.domoticzAddress = urlParts.hostname
                 self.domoticzPort = str(urlParts.port)
                 self.domoticzHttps = urlParts.scheme.lower() == "https"
@@ -462,7 +490,8 @@ class BasePlugin:
             lwtTopic, lwtData)
 
         # Connect to HTTP server
-        self.httpClient = HttpClient(self.domoticzAddress, self.domoticzPort, self.domoticzHttps, \
+        self.httpClient = HttpClient(self.domoticzAddress, self.domoticzUsername, self.domoticzPassword, \
+            self.domoticzPort, self.domoticzHttps, \
             self.onConnect, self.onDisconnect, self.onMessage)
 
         # Enable heartbeat
