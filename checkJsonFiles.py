@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-fileVersion = "1.1.0"                                       # File version
+fileVersion = "1.1.1"                                       # File version
 
 import pathlib
 import os
@@ -50,4 +50,5 @@ while (1):
             if analyzer.valueToSetOriginal != None:
                 result += F"/{analyzer.valueToSetOriginal}"
             result += F", setBy={analyzer.setBy}"
+        result += F", category={analyzer.deviceCategory}"
         print(result)

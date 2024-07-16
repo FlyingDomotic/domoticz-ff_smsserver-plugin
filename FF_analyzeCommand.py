@@ -28,7 +28,7 @@ import unidecode
 class FF_analyzeCommand:
     # Class initialization 
     def __init__(self):
-        self.fileVersion = "2.0.0"                          # File version
+        self.fileVersion = "2.1.1"                          # File version
         self.errorSeen = False;                             # Do we seen an error ?
         self.convertUtf8ToAscii7Input = True;               # Convert input to Ascii7?
         self.convertUtf8ToAscii7Output = False;             # Convert saved output to Ascii7?
@@ -564,4 +564,5 @@ class FF_analyzeCommand:
                                 self.deviceIdName = self.getValue2(self.devicesDict,self.deviceName, "name",self.deviceName)
                                 self.commandValue = self.getValue2(self.commandValuesDict,commandCommandValue, "codeValue")
                                 self.commandValueText = commandCommandValue
+                                self.deviceCategory = deviceCategory
         return self.firstErrorMessage, self.allMessages
