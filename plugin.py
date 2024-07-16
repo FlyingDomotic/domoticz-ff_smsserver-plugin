@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.4" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.5" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -52,6 +52,7 @@ import typing_extensions
 import json
 import time
 import traceback
+import base64
 from FF_analyzeCommand import FF_analyzeCommand
 
 # Local MQTT client class
@@ -275,6 +276,17 @@ class HttpClient:
                 return
             result = getValue(jsonData, "result")
             dataValue = getValue(result[0], "Data", "not known")
+            # Replace data value for selectors with level names (for old Domoticz versions)
+            if getValue(result[0], "SwitchType", "") == "Selector":
+                levelNames = getValue(result[0], "LevelNames","")
+                if levelNames:
+                    level = getValue(result[0], "LevelInt", "")
+                    if level != "":
+                        levelNamesList = base64.b64decode(levelNames.encode("ascii")).decode("UTF8").split("|")
+                        try:
+                            dataValue = levelNamesList[int(int(level)/10)]
+                        except Exception as e:
+                            Domoticz.Error(F"{e} reading item {level} of {levelNamesList}")
             lastUpdate = getValue(result[0], "LastUpdate", "????-??-?? ??:??:??")
             # Compose SMS answer message (device name/value @dd/mm hh:mm)
             message = self.deviceName + F" is {dataValue} @{lastUpdate[8:10]}/{lastUpdate[5:7]} {lastUpdate[11:16]}"
