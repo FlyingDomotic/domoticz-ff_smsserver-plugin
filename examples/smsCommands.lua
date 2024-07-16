@@ -74,7 +74,7 @@ domoticzUrl = "http://127.0.0.1:8080"									-- This is your Domoticz's URL, wi
 for deviceName,deviceValue in pairs(devicechanged) do
 	-- Is this received SMS command device?
 	if (deviceName==smsCommandDeviceName) then
-		tags = string.split(deviceValue, " ")							-- Split command into tags
+		tags = string.split(deviceValue, "~")							-- Split command into tags
 		phoneNumber = tags[smsNumberTag]								-- Extract phone number to send answers to
 		if tags[commandTag] == 'local' then								-- Is this a local Os command to execute?
 			startPos, endPos = string.find(deviceValue, 'local ')		-- Locate "local " keyword in received command
@@ -127,10 +127,15 @@ for d,v in pairs(commandArray) do
 end
 return commandArray
 --[[
-	This is script is run each time something is written into Domoticz's device pointed by smsCommandDeviceName variable(defaulting to "SMS user request").
+	This is script is run each time something is written into Domoticz's device 
+        pointed by smsCommandDeviceName variable (defaulting to "SMS user request").
 
 	FF_SmsServer plugin write it each time an SMS "set" command with a "setBy":"user" is received.
-	It's useful for devices that can't be set simply (for example, security panel), when requiring to change multiples devices simultaneously, when external actions are to be run, when testing other devices is needed to define correct value...
+	It's useful for devices that can't be set simply (for example, security panel),
+        when requiring to change multiples devices simultaneously,
+        when external actions are to be run,
+        when testing other devices is needed to define correct value...
 
-	Default example comes with security panel example (as well as root for other commands type). Define your security panel code and Domoticz URL in header if needed.
+	Default example comes with security panel example (as well as root for other commands type).
+        Define your security panel code and Domoticz URL in header if needed.
 ]]

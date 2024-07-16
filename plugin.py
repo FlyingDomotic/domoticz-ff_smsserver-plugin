@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.3" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with LAN interface" author="Flying Domotic" version="2.0.4" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -569,17 +569,17 @@ class BasePlugin:
                             # SMS sender phone number
                             str(number)+ 
                             # Command value
-                            " "+str(self.analyzer.commandValue)+ 
+                            "~"+str(self.analyzer.commandValue)+ 
                             # Device ID
-                            " "+str(self.analyzer.deviceId)+ 
+                            "~"+str(self.analyzer.deviceId)+ 
                             # Device class
-                            " "+str(self.analyzer.deviceClass)+ 
+                            "~"+str(self.analyzer.deviceCategory)+ 
                             # Value to set as given
-                            " "+str(self.analyzer.valueToSet)+ 
-                            # Value to set remapped with "values" in "deviceClasses" of smsTables.json
-                            " "+str(self.analyzer.valueToSetOriginal)+
+                            "~"+str(self.analyzer.valueToSet)+ 
+                            # Value to set remapped with "values" in "devices" of smsTables.json
+                            "~"+str(self.analyzer.valueToSetOriginal)+
                             # Value to set type
-                            " "+str(self.analyzer.valueToSetType)
+                            "~"+str(self.analyzer.valueToSetType)
                         )
                         Domoticz.Log(F"Domoticz message: >{domoticzMessage}<")
                         requestDevice = self.getDevice('userRequest')
