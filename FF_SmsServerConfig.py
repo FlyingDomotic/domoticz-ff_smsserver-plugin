@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #   Creates FF_SmsServer config default file from template and Domoticz device list
-#   V1.0.0
+#   V1.1.0
 import requests
 import base64
 import pathlib
@@ -23,20 +23,23 @@ def loadDictionary(file):
     else:
         return {}
 
+# Check if new API is used
+def isNewApi(version):
+    return version[:2] == "20" and version >= "2023.2"
+
 # Execute a JSON request
-def getResult(command):
+def readApi(command):
+    # Send request
     response = requests.get(domoticzUrl+"json.htm?"+command)
+    # If status code
     if response.status_code == 200:
+        # Check status answer = "OK"
         if response.json()["status"] == "OK":
             return response
-        else:
-            print("Error "+str(response.status_code)+" returned by "+response.url)
-            print("Returned: "+response.text)
-            exit(2)
-    else:
-        print("Error "+str(response.status_code)+" reading "+response.url)
-        print("Returned: "+response.text)
-        exit(2)
+    # Print error message and exit
+    print("Error "+str(response.status_code)+" reading "+response.url)
+    print("Returned: "+response.text)
+    exit(2)
 
 # Get a key in dictionary, return default value if not found
 def getKey(key, dict, default = None):
@@ -107,8 +110,19 @@ for item in hiddenDevices:
     regEx = re.compile(item, flags=re.IGNORECASE)
     hiddenDevicesRegEx.append(regEx)
 
+# Get Domoticz settings to find version number
+domoticzVersionResponse = readApi("type=command&param=getversion")
+domoticzVersion = getKey("version", domoticzVersionResponse.json(), "")
+if domoticzVersion == "":
+    domoticzVersion = "2099.9"
+    print(F"Can't find 'version' in {domoticzVersionResponse.text}, setting to {domoticzVersion}")
+
 # Compose command to send depending on user needs
-params = "type=devices"
+if isNewApi(domoticzVersion):
+    params = "type=command&param=getdevices"
+else:
+    params = "type=devices"
+
 if showHiddenDevices:
     params +="&displayhidden=1"
 
@@ -116,7 +130,7 @@ if showUsedDeviceOnly:
     params +="&used=true"
 
 # Execute device list request
-response = getResult(params)
+response = readApi(params)
 
 # Save answer if required
 if keepDomoticzDeviceList:
