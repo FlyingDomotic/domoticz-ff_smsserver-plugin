@@ -51,7 +51,7 @@ cp examples/* ./
 ```
 6. Restart Domoticz.
 7. Make sure that "Accept new Hardware Devices" is enabled in Domoticz settings.
-8. Go to "Hardware" page and add new item with type "FF_SmsServer with LAN interface".
+8. Go to "Hardware" page and add new item with type "FF_SmsServer with network interface".
 9. Give "smsTables.json" as configuration file name to be used (located in FF_SmsServer plugin folder).
 
 1. Clonez le code dans le répertoire plugins de Domoticz.
@@ -75,7 +75,7 @@ cp examples/* ./
 ```
 6. Relancez Domoticz.
 7. Assurez vous que "Accepter de nouveaux dispositifs" est coché dans les paramètres de Domoticz.
-8. Allez dans la page "Matériel" et ajouter un matériel "FF_SmsServer with LAN interface".
+8. Allez dans la page "Matériel" et ajouter un matériel "FF_SmsServer with network interface".
 9. Donnez le nom "smsTables.json" pour le fichier de configuration JSON (situé dans le répertoire du plugin FF_SmsServer).
 
 ## Update/Mise à jour
