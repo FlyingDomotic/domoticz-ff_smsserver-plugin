@@ -45,7 +45,7 @@ cp examples/* ./
 ```
 ./FF_SmsServerConfig.py
 ```
-5. Run makeDoc.py script, which will create config.txt file, sorted by Domoticz device name, containing available commands on your installation. Don't forget to add chosen prefix (by default domoticz) in front of each command.
+5. Run makeDoc.py script, which will dummp Domoticz values and allowed commands, sorted by Domoticz device name. Don't forget to add chosen prefix (by default domoticz) in front of each command.
 ```
 ./makeDoc.py
 ```
@@ -69,7 +69,7 @@ cp examples/* ./
 ```
 ./FF_SmsServerConfig.py
 ```
-5. Lancez le script makeDoc.py qui va générer le fichier config.txt, qui contient, trié par nom de dispositif Domoticz, les commandes disponibles sur votre installation. Ne pas oublier d'ajouter le préfixe choisi (par défaut domoticz) devant toutes les commandes.
+5. Lancez le script makeDoc.py qui va afficher les valeurs des dispositfs Domoticz, triés par nom anisi que les commandes disponibles sur votre installation. Ne pas oublier d'ajouter le préfixe choisi (par défaut domoticz) devant toutes les commandes.
 ```
 ./makeDoc.py
 ```
