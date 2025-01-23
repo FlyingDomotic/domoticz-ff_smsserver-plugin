@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.0.7" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.0.8" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -392,7 +392,7 @@ class BasePlugin:
         self.debugging = Parameters["Mode6"]        # Debug mode from plug-in parameters
         DumpConfigToLog()
         if self.debugging == "Verbose+":
-            Domoticz.Debugging(1+2+4+8+16+64)
+            Domoticz.Debugging(1+2+4+8+16+32+64)
         elif self.debugging == "Verbose":
             Domoticz.Debugging(2+4+8+16+64)
         elif self.debugging == "Debug":
@@ -773,7 +773,7 @@ def DumpConfigToLog():
 def DumpMQTTMessageToLog(topic, rawmessage, prefix=''):
     message = rawmessage####.decode('utf8','replace')
     ####message = str(message.encode('unicode_escape'))
-    Domoticz.Log(prefix+topic+":"+message)
+    Domoticz.Log(F"{prefix}{topic}: {message}")
 
 # Returns a dictionary value giving a key or default value if not existing
 def getValue(dict, key, default=''):
