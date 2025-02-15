@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.0.8" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.0.9" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -317,7 +317,8 @@ class HttpClient:
             message = self.deviceName + F" is {dataValue} @{lastUpdate[8:10]}/{lastUpdate[5:7]} {lastUpdate[11:16]}"
             jsonAnswer = {}
             jsonAnswer['number'] = str(self.smsPhoneNumber)
-            jsonAnswer['message'] = message
+            # Limit long message to 200 chars
+            jsonAnswer['message'] = message[:200]
             answerMessage = json.dumps(jsonAnswer, ensure_ascii=False)
             Domoticz.Log(F"Show result: >{replaceCrLf(answerMessage)}<")
             _plugin.mqttClient.Publish(_plugin.smsServerSendTopic, answerMessage)
@@ -588,7 +589,8 @@ class BasePlugin:
                     message = errorText
                     jsonAnswer = {}
                     jsonAnswer['number'] = str(number)
-                    jsonAnswer['message'] = message
+                    # Limit long message to 200 chars
+                    jsonAnswer['message'] = message[:200]
                     answerMessage = json.dumps(jsonAnswer, ensure_ascii=False)
                     Domoticz.Log(F"Answer: >{replaceCrLf(answerMessage)}<")
                     self.mqttClient.Publish(self.smsServerSendTopic, answerMessage)
@@ -598,7 +600,7 @@ class BasePlugin:
                     if messages:
                         Domoticz.Log(F"Info: {replaceCrLf(messages)}")
                     # Rebuild non abbreviated command
-                    understoodMessage = self.analyzer.command+"  "+self.analyzer.deviceName+(" "+self.analyzer.valueToSet if self.analyzer.valueToSet != None else "")
+                    understoodMessage = self.analyzer.command+"  "+self.analyzer.deviceName+(" "+str(self.analyzer.valueToSet) if self.analyzer.valueToSet != None else "")
                     Domoticz.Log(F"Understood command is >{understoodMessage}<")
                     # Set Domoticz last request with non abbreviated command
                     lastRequestDevice = self.getDevice('request')
