@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.0.9" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.1.0" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -635,12 +635,11 @@ class BasePlugin:
                         self.httpClient.deviceName = self.analyzer.deviceName
                         self.httpClient.deviceId = self.analyzer.deviceId
                         self.httpClient.sendDelay = 2
-                        nValue = 0;
-                        sValue = ""
+                        jsonMessage = "{"+F'"command":"addlogmessage","message":"SMS server plugin: Can not set type >{self.analyzer.valueToSetType}< for >{replaceCrLf(message)}<'+"}"
                         if self.analyzer.commandValue == 1:     # CdeOn
-                            nValue = 1
+                            jsonMessage = "{"+F'"command":"switchlight","idx":{self.analyzer.deviceId},"switchcmd":"On","rssi":6,"battery":255'+"}"
                         elif self.analyzer.commandValue == 2:   # CdeOff
-                            nValue = 0
+                            jsonMessage = "{"+F'"command":"switchlight","idx":{self.analyzer.deviceId},"switchcmd":"Off","rssi":6,"battery":255'+"}"
                         elif self.analyzer.commandValue == 4:   # CdeShow
                             # Load current device status
                             self.httpClient.Open()
@@ -650,24 +649,15 @@ class BasePlugin:
                             # 'level','setPoint', 'integer', 'float','string'
                             if self.analyzer.valueToSetType == "level":
                                 numValue = int(self.analyzer.valueToSet)
-                                if numValue == 0:
-                                    nValue = 0
-                                    sValue = "0"
-                                elif numValue == 100:
-                                    nValue = 1
-                                    sValue = "100"
-                                else:
-                                    nValue = 2
-                                    sValue = str(numValue)
+                                jsonMessage = "{"+F'"command":"switchlight","idx":{self.analyzer.deviceId},"switchcmd":"Set Level","level":{numValue}"rssi":6,"battery":255'+"}"
                             elif self.analyzer.valueToSetType == "setPoint":
-                                sValue = self.analyzer.valueToSet
+                                jsonMessage = "{"+F'"command":"udevice","idx":{self.analyzer.deviceId},"svalue":"{self.analyzer.valueToSet}","rssi":6,"battery":255'+"}"
                             elif self.analyzer.valueToSetType == "integer":
-                                nValue = self.analyzer.valueToSet
+                                jsonMessage = "{"+F'"command":"udevice","idx":{self.analyzer.deviceId},"nvalue":{self.analyzer.valueToSet},"rssi":6,"battery":255'+"}"
                             elif self.analyzer.valueToSetType == "float":
-                                sValue = self.analyzer.valueToSet
+                                jsonMessage = "{"+F'"command":"udevice","idx":{self.analyzer.deviceId},"svalue":"{self.analyzer.valueToSet}","rssi":6,"battery":255'+"}"
                             elif self.analyzer.valueToSetType == "string":
-                                sValue = self.analyzer.valueToSet
-                        jsonMessage = "{"+F'"command":"udevice","idx":{self.analyzer.deviceId},"nvalue":{nValue},"svalue":"{sValue}","rssi":6,"battery":255'+"}"
+                                jsonMessage = "{"+F'"command":"udevice","idx":{self.analyzer.deviceId},"svalue":"{self.analyzer.valueToSet}","rssi":6,"battery":255'+"}"
                         Domoticz.Log(F"Domoticz update: >{jsonMessage}<")
                         self.mqttClient.Publish(self.domoticzInTopic, jsonMessage)
                         # Load current device status
