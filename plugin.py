@@ -21,7 +21,7 @@
 #
 #   Flying Domotic -  https://github.com/FlyingDomotic/domoticz-FF_SmsServer-plugin.git
 """
-<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.1.0" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
+<plugin key="FF_SmsServer" name="FF_SmsServer with network interface" author="Flying Domotic" version="2.1.1" externallink="https://github.com/FlyingDomoticz/domoticz-ff_smsserver-plugin">
     <description>
       FF_SmsServer plug-in<br/><br/>
       Set/display state of Domoticz devices through SMS<br/>
@@ -496,7 +496,7 @@ class BasePlugin:
             self.onConnect, self.onDisconnect, self.onMessage)
 
         # Enable heartbeat
-        Domoticz.Heartbeat(60)
+        Domoticz.Heartbeat(15)
 
     # TCP base-plug-in connection callback
     def onConnect(self, Connection, Status, Description):
